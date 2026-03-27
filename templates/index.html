@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UTN DevOps</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      color: #f0f0f0;
+    }
+
+    header {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #64d4f7;
+      letter-spacing: 1px;
+    }
+
+    header span {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .hero h2 {
+      font-size: 2.2rem;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #aacfdb;
+      font-size: 1.05rem;
+    }
+
+    /* ── Botón miembros ── */
+    .btn-members {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 32px;
+      background: linear-gradient(90deg, #64d4f7, #0ea5e9);
+      color: #0f2027;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(100, 212, 247, 0.3);
+    }
+
+    .btn-members:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(100, 212, 247, 0.5);
+    }
+
+    /* ── Panel de miembros (oculto por defecto) ── */
+    .members-panel {
+      display: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(100, 212, 247, 0.25);
+      border-radius: 16px;
+      padding: 30px;
+      margin-top: 30px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .members-panel.open { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .members-panel h3 {
+      font-size: 1.2rem;
+      color: #64d4f7;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(100, 212, 247, 0.2);
+      padding-bottom: 10px;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 18px 14px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.2s;
+    }
+
+    .member-card:hover { background: rgba(100, 212, 247, 0.1); }
+
+    .member-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #64d4f7, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f2027;
+      margin: 0 auto 10px;
+    }
+
+    .member-card p {
+      font-size: 0.9rem;
+      color: #cde8f5;
+      font-weight: 600;
+    }
+
+    /* ── Tabla de registros ── */
+    .card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 28px;
+      margin-top: 20px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: #64d4f7;
+      margin-bottom: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead tr {
+      background: rgba(100, 212, 247, 0.12);
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    th { color: #64d4f7; font-weight: 600; }
+    td { color: #dde8ee; }
+
+    tbody tr:hover { background: rgba(255,255,255,0.04); }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #556;
+      font-size: 0.8rem;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>&#9881; UTN DevOps</h1>
+    <span>Práctica de contenedores</span>
+  </header>
+
+  <div class="container">
+
+    <div class="hero">
+      <h2>Hola UTN &#128075;</h2>
+      <p>Aplicación Flask + MySQL desplegada con Docker</p>
+      <button class="btn-members" onclick="toggleMembers()">
+        &#128101; Ver miembros del grupo
+      </button>
+    </div>
+
+    <!-- Panel de miembros -->
+    <div class="members-panel" id="membersPanel">
+      <h3>&#128101; Miembros del grupo</h3>
+      <div class="members-grid">
+        {% for member in members %}
+        <div class="member-card">
+          <div class="member-avatar">{{ member.initials }}</div>
+          <p>{{ member.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Tabla de registros de la DB -->
+    <div class="card">
+      <h3>&#128200; Registros de la base de datos</h3>
+      {% if rows %}
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p style="color:#aaa;">No hay registros en la base de datos.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <footer>UTN Facultad Regional — Práctica DevOps 2025</footer>
+
+  <script>
+    function toggleMembers() {
+      const panel = document.getElementById('membersPanel');
+      const btn = document.querySelector('.btn-members');
+      panel.classList.toggle('open');
+      btn.textContent = panel.classList.contains('open')
+        ? '✕ Cerrar miembros'
+        : '👥 Ver miembros del grupo';
+    }
+  </script>
+
+</body>
+</html>

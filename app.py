@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import mysql.connector
 
 app = Flask(__name__)
@@ -11,17 +11,14 @@ def home():
         password="root",
         database="testdb"
     )
-
     cursor = db.cursor()
-    cursor.execute("SELECT id, description FROM items")
 
+    cursor.execute("SELECT id, description FROM items")
     rows = cursor.fetchall()
 
-    html = "<h1>Hola UTN - Práctica DevOps</h1>"
+    cursor.execute("SELECT name, initials FROM members")
+    members = [{"name": r[0], "initials": r[1]} for r in cursor.fetchall()]
 
-    for row in rows:
-        html += f"<p>Registro ID = {row[0]} - {row[1]}</p>"
-
-    return html
+    return render_template("index.html", rows=rows, members=members)
 
 app.run(host="0.0.0.0", port=80)
