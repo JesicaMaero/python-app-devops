@@ -9,7 +9,8 @@ def home():
         host="mysql",
         user="root",
         password="root",
-        database="testdb"
+        database="testdb",
+        charset="utf8mb4"
     )
     cursor = db.cursor()
 
